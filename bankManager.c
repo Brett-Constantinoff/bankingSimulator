@@ -6,13 +6,15 @@
 
 int idNumbers = 1000;
 
+/**********************************************
+ myMalloc: requests that nbytes of storage be allocated,
+ if allocation fails the program will take appropriate
+ action. A pointer to the first byte in the block of 
+ allocated memory is returned for usage.
+**********************************************/
 void *myMalloc(size_t nbytes){
-    /*
-    Wrapper function for malloc
-    Param: n bytes
-    Return: void pointer
-    */
-    void* ptr;
+   
+    void *ptr;
     ptr = malloc(nbytes);
     if(ptr == NULL){
         printf("Failed allocating memory!\n");
@@ -21,12 +23,13 @@ void *myMalloc(size_t nbytes){
     return ptr;
 }
 
+/**********************************************
+ openFile: opens a file in a a given mode, if the 
+ file cannot be oppened, the program will take appropriate
+ action. The file pointer is returned for usage
+**********************************************/
 FILE *openFile(char *fileName, char *mode){
-    /*
-    Wrapper function for fopen
-    Param: file name, mode to be opened
-    Return: file pointer
-    */
+    
     FILE *fp;
     fp = fopen(fileName, mode);
     if(fp == NULL){
@@ -36,13 +39,13 @@ FILE *openFile(char *fileName, char *mode){
     return fp;
 }
 
+/**********************************************
+ getAccounts: gets the current list of accounts 
+ from filename as an array and returns a pointer
+ to the first element in the array
+**********************************************/
 bankAccount *getAccounts(char *fileName){
-    /*
-    Gets the current account list from a binary file
-    Param: file name
-    return: accounts
-    */
-
+    
     FILE *fp;
     bankAccount *accounts;
     int n;
@@ -56,12 +59,13 @@ bankAccount *getAccounts(char *fileName){
     return accounts;
 }
 
+/**********************************************
+ getNumAccounts: gets the current number of 
+ accounts in the array stored in filename and 
+ returns it
+**********************************************/
 int getNumAccounts(char *fileName){
-    /*
-    Gets the current number of accounts from a binary file
-    Param: file name
-    return: number of accounts
-    */
+    
     int n;
     FILE *fp;
 
@@ -73,12 +77,14 @@ int getNumAccounts(char *fileName){
     return n;
 }
 
+
+/**********************************************
+ saveData: saves the current account information 
+ into a file. The array of accounts will be read from
+ the file, the account in the array is updated and the
+ array is read back to the same file.
+**********************************************/
 void saveData(char *fileName, bankAccount *account){
-    /*
-    Saves the current information of an account to a binary file
-    Param: file name, bank account
-    return: None
-    */
 
     FILE *fp;
     bankAccount *accounts;
@@ -100,12 +106,16 @@ void saveData(char *fileName, bankAccount *account){
     fclose(fp);
 }
 
+
+/**********************************************
+ createPassword: creates a password for a bank account.
+ Error checking is used to make sure new passwords are not
+ the same as the old password, at least one number, lower case
+ and upper case character are present. Also ensures passwords 
+ are longer than 8 characters.
+**********************************************/
 void createPassword(bankAccount *account){
-    /*
-    Creates a password for a new bank account
-    param: new bank account pointer
-    return: None
-    */
+    
     bool upper, lower, num, length;
     int i = 0, len = 0;
     char c;
@@ -142,6 +152,14 @@ void createPassword(bankAccount *account){
         }
     }while(upper == false || lower == false || num == false);
 }
+
+
+/**********************************************
+ createAccount: creates a bank account with a new
+ user, password and initial monetary ammounts in 
+ checkings and savings. The account is then saved 
+ to a file.
+**********************************************/
 void createAccount(bankAccount *account){
 
     int i = 0, accounts;
@@ -170,7 +188,14 @@ void createAccount(bankAccount *account){
     fclose(fp);
 }
 
+/**********************************************
+ verifyPassword: checks to make sure that a user
+ entered password matches the password saved for 
+ their account. If the user enters an incorrect 
+ password 3 times, the simulator will quit.
+**********************************************/
 bankAccount verfiyPassword(void){
+   
     char enteredPwd[PWRDSIZE + 1];
     int i = 0, numAccounts, attempts = 0;
     char c;
@@ -210,6 +235,11 @@ bankAccount verfiyPassword(void){
     exit(EXIT_FAILURE);
 }
 
+/**********************************************
+ printAccounts: displays the owner, account ID
+ and ammount in checkings and savings for each account
+ currently saved in the file
+**********************************************/
 void printAccounts(void){
 
     bankAccount *accounts;
@@ -229,6 +259,10 @@ void printAccounts(void){
     free(accounts);
 }
 
+/**********************************************
+ printAccountInfo: displays current account information
+ to a user currently logged into their account
+**********************************************/
 void printAccountInfo(bankAccount account){
     printf("*** Account info ***\n");
     printf("Owner of account: %s\n", account.name);
@@ -237,6 +271,11 @@ void printAccountInfo(bankAccount account){
     printf("Amount in savings: %.2f\n", account.savings);
 }
 
+/**********************************************
+ addFunds: adds a user entered ammount of funds
+ to either checkings or savings. The account is 
+ then saved.
+**********************************************/
 void addFunds(bankAccount *account){
     float add;
     int option;
@@ -263,12 +302,23 @@ void addFunds(bankAccount *account){
     
 }
 
+/**********************************************
+ changePassword: allows the user to change their
+ account password. After changing their password
+ the account is then saved.
+**********************************************/
 void changePassword(bankAccount account){
     
     createPassword(&account);
     saveData(FILENAME, &account);
 }
 
+/**********************************************
+ deleteAccount: deletes a users account, the 
+ array of accounts is read from the file and then
+ all but the current account is coppied back into
+ the array, the array is then saved back to the file.
+**********************************************/
 void deleteAccount(bankAccount account){
 
     FILE *fp;
@@ -290,6 +340,12 @@ void deleteAccount(bankAccount account){
     
 }
 
+/**********************************************
+ updateAccountOwner: allows for an owner of a
+ bank account to update the owner of the account.
+ After changing the owner, the account is the 
+ saved.
+**********************************************/
 void updateAccountOwner(bankAccount *account){
     int i = 0;
     char c;
