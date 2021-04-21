@@ -355,7 +355,7 @@ void transferFunds(Client *c){
             else{
                 temp->accounts.savings += transfer;
             }
-            addTransaction(c, 0, account, transfer);
+            addTransaction(temp, 0, account, transfer);
             fseek(fp, -sizeof(Client), SEEK_CUR);
             fwrite(temp, sizeof(Client), 1, fp);
         }
