@@ -1,11 +1,11 @@
 CC = gcc
-CFLAGS = -Wall -std=c99 -g
+CFLAGS = -Wall -std=c99
 
-bankManager.o: bankManager.h bankManager.c 
-	$(CC) $(CFLAGS) -c bankManager.c
+system.o: system.c system.h
+	$(CC) $(CFLAGS) -c system.c
 
-client.o: bankManager.h client.c 
-	$(CC) $(CFLAGS) -c client.c
+main.o: system.h main.c
+	$(CC) $(CFLAGS) -c main.c
 
-client: bankManager.o client.o
-	$(CC) $(CFLAGS) -o client bankManager.o client.o
+main: system.o main.o
+	$(CC) $(CFLAGS) -o main main.o system.o
